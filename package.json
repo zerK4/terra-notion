@@ -6,22 +6,47 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "turso:local": "bunx turso dev --db-file database.db",
+    "push:db": "bunx drizzle-kit push:sqlite",
+    "migration:generate": "bunx drizzle-kit generate:sqlite",
+    "studio": "bunx drizzle-kit studio"
   },
   "dependencies": {
+    "@blocknote/core": "^0.11.1",
+    "@blocknote/react": "^0.11.1",
+    "@clerk/clerk-react": "^4.30.3",
+    "@clerk/nextjs": "^4.29.5",
+    "@clerk/themes": "^1.7.9",
+    "@libsql/client": "^0.4.0",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
+    "@radix-ui/react-slot": "^1.0.2",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "drizzle-orm": "^0.29.3",
+    "lucide-react": "^0.316.0",
+    "next": "14.1.0",
+    "next-themes": "^0.2.1",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.1.0"
+    "tailwind-merge": "^2.2.1",
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^9.0.1",
+    "zustand": "^4.5.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
+    "drizzle-kit": "^0.20.13",
     "eslint": "^8",
-    "eslint-config-next": "14.1.0"
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8",
+    "prettier": "^3.2.4",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
   }
 }
