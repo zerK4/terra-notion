@@ -1,48 +1,27 @@
 'use client';
 
 import { sidebarStore } from '@/src/store/sidebar';
-import { ChevronRight, PlusIcon, SearchIcon, SettingsIcon } from 'lucide-react';
+import { ChevronRight, PlusIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { UserComponent } from './userComponent';
 import { Separator } from '@/src/components/ui/separator';
-import { getNavStories } from '../../actions/storyActions';
-import Stories, { NavStoriesInterface } from './stories';
+import Stories from './stories';
 import { useMediaQuery } from 'usehooks-ts';
+import { usePathname, useRouter } from 'next/navigation';
+import { NavStories } from '@/src/interfaces/story';
+import { sidebarMenu } from '@/src/menus/sidebar';
 
-const sidebarMenu = [
-  {
-    name: 'Search',
-    icon: <SearchIcon size={16} />,
-    action: (e: any) => console.log(e),
-  },
-  {
-    name: 'Settings',
-    icon: <SettingsIcon size={16} />,
-    action: (e: any) => console.log(e),
-  },
-  {
-    name: 'New story',
-    icon: <PlusIcon size={16} />,
-    action: (e: any) => console.log(e),
-  },
-];
-
-function Sidebar() {
-  const { isClosed } = sidebarStore();
+function Sidebar({ stories }: { stories: string }) {
+  const { isClosed, tempShow } = sidebarStore();
   const [showStories, setShowStories] = useState<boolean>();
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const [myStories, setMyStories] = useState<NavStoriesInterface[]>();
+  const [myStories, setMyStories] = useState<NavStories[]>();
+  const router = useRouter();
+  const pathName = usePathname();
 
   useEffect(() => {
-    getNavStories()
-      .then((res) => {
-        console.log(res, 'this is the response');
-        setMyStories(res.stories);
-      })
-      .catch((err) => {
-        console.log(err, 'this is the error');
-      });
-  }, []);
+    setMyStories(JSON.parse(stories));
+  }, [stories]);
 
   useEffect(() => {
     if (isMobile) {
@@ -57,9 +36,26 @@ function Sidebar() {
   }, [isMobile]);
 
   return (
-    <div className={` relative ${isClosed ? 'w-0' : 'w-64'}`}>
+    <div className={`relative ${isClosed ? 'w-0' : 'w-72'}`}>
+      {isClosed && (
+        <div
+          onMouseEnter={() =>
+            !isMobile && sidebarStore.setState({ tempShow: true })
+          }
+          onMouseLeave={() =>
+            !isMobile && sidebarStore.setState({ tempShow: false })
+          }
+          className="h-screen w-32 bg-transparent fixed top-8 left-0"
+        />
+      )}
       <aside
-        className={`${isClosed ? '-translate-x-[100vw]' : ''} fixed top-8 ease-in-out duration-300 z-[9999] group/sidebar left-0 min-h-screen bg-primary w-64 flex flex-col`}
+        onMouseOver={() =>
+          isClosed && !isMobile && sidebarStore.setState({ tempShow: true })
+        }
+        onMouseLeave={() =>
+          isClosed && !isMobile && sidebarStore.setState({ tempShow: false })
+        }
+        className={`${isClosed ? '-translate-x-[100vw]' : ''} ${tempShow ? '!h-64 left-0 translate-x-0' : ''} fixed top-8 ease-in-out duration-300 z-[9999] group/sidebar left-0 min-h-screen bg-primary w-64 flex flex-col`}
       >
         <UserComponent />
         <div className="w-full flex flex-col gap-0.5 items-start">
@@ -67,7 +63,7 @@ function Sidebar() {
             <button
               className="p-1 px-4 hover:bg-accent ease-in-out duration-300 w-full text-start flex items-center gap-2"
               key={name}
-              onClick={(e) => action(e)}
+              onClick={(e) => action(e, router)}
             >
               <span className="">{icon}</span>
               <span className="">{name}</span>

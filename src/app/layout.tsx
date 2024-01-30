@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/src/components/theme-provider';
 import { ClerkProvider } from '@clerk/nextjs';
-
-const inter = Inter({ subsets: ['latin'] });
+import { Toaster } from '../components/ui/sonner';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,8 +15,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark-theme">
-      <body className="overflow-x-hidden">
+    <html suppressHydrationWarning={true} lang="en" className="dark-theme">
+      <body className="overflow-x-hidden" suppressHydrationWarning={true}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -27,6 +25,7 @@ export default async function RootLayout({
         >
           <ClerkProvider>
             <div className="bg-secondary min-h-screen">{children}</div>
+            <Toaster position="top-right" />
           </ClerkProvider>
         </ThemeProvider>
       </body>

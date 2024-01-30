@@ -11,24 +11,38 @@ import {
 import { ChevronsLeft } from 'lucide-react';
 import { useClerk, useUser } from '@clerk/clerk-react';
 import { useRouter } from 'next/navigation';
+import { sidebarStore } from '@/src/store/sidebar';
 
 export function UserComponent() {
   const { signOut } = useClerk();
+  const { isClosed } = sidebarStore();
   const { user } = useUser();
   const router = useRouter();
   return (
     <DropdownMenu>
       <div className="flex items-center w-full justify-between">
         <DropdownMenuTrigger asChild>
-          <Button className="border-none text-foreground outline-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none hover:bg-accent w-full flex justify-start">
+          <Button
+            onClick={() => sidebarStore.setState({ isClosed: false })}
+            className="border-none text-foreground outline-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none hover:bg-accent w-full flex justify-start"
+          >
             {user?.firstName}
           </Button>
         </DropdownMenuTrigger>
-        <button className="h-10 w-10 hover:bg-accent flex items-center justify-center">
-          <ChevronsLeft />
-        </button>
+        {!isClosed && (
+          <button
+            onClick={() =>
+              sidebarStore.setState({
+                isClosed: !isClosed,
+              })
+            }
+            className="h-10 w-10 hover:bg-accent flex items-center justify-center"
+          >
+            <ChevronsLeft />
+          </button>
+        )}
       </div>
-      <DropdownMenuContent className="w-[20rem] bg-primary border-accent ml-4">
+      <DropdownMenuContent className="w-[20rem] bg-primary border-accent ml-4 z-[99999] shadow-md shadow-secondary">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
