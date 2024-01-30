@@ -1,9 +1,10 @@
 import { SignIn } from '@clerk/nextjs';
+import React from 'react';
 import { dark } from '@clerk/themes';
 
-async function Page() {
+function page() {
   return (
-    <div className="flex p-0 m-0 w-screen bg-background h-screen justify-center items-center">
+    <div className="flex items-center justify-center h-screen w-screen overflow-hidden">
       <SignIn
         appearance={{
           baseTheme: dark,
@@ -13,4 +14,4 @@ async function Page() {
   );
 }
 
-export default Page;
+export default page;

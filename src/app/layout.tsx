@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import { ClerkProvider, currentUser } from '@clerk/nextjs';
+import { ThemeProvider } from '@/src/components/theme-provider';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,22 +16,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await currentUser();
-
-  console.log(user, 'the current user');
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ClerkProvider afterSignInUrl="/dashboard" afterSignUpUrl="/onboarding">
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </ClerkProvider>
+    <html lang="en" className="dark-theme">
+      <body className="overflow-x-hidden">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ClerkProvider>
+            <div className="bg-secondary min-h-screen">{children}</div>
+          </ClerkProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
