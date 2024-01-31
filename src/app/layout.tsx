@@ -33,6 +33,8 @@ export default async function RootLayout({
     await db.insert(users).values({
       email: user.emailAddresses[0].emailAddress,
       id: user.id,
+      first_name: user.firstName,
+      last_name: user.lastName,
     });
   }
 
