@@ -13,7 +13,7 @@ function Stories({ stories }: { stories?: NavStories[] }) {
   };
 
   return (
-    <div className="w-full overflow-hidden mt-1 flex flex-col gap-1 max-h-[30vh] overflow-y-scroll">
+    <div className="w-full overflow-hidden mt-1 flex flex-col gap-1">
       {stories !== undefined &&
         stories.length !== 0 &&
         stories?.map(({ id, title, icon }) => (
@@ -33,7 +33,7 @@ function Stories({ stories }: { stories?: NavStories[] }) {
               </IconPicker>
               <Link
                 href={`/${id}`}
-                className="whitespace-nowrap overflow-hidden max-w-[8rem]"
+                className="whitespace-nowrap overflow-hidden max-w-[12rem]"
               >
                 <span>{title}</span>
               </Link>
