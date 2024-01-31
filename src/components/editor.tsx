@@ -25,7 +25,7 @@ export default function TextEditor({
   useEffect(() => {
     editorStore.setState({ saveDate: updated });
     pageStore.setState({ pageName: name, pageId: id, sharedLink: sharedLink });
-  }, [updated, name, id]);
+  }, [updated, name, id, sharedLink]);
 
   const handleSaving = async (e?: EditorType) => {
     if (autoSave) {
@@ -80,7 +80,7 @@ export default function TextEditor({
   return (
     <div className="w-[100vw] md:w-[60vw]">
       <Editor
-        onUpdate={(e) => handleUpdate(e)}
+        onUpdate={(e) => handleUpdate(e as any)}
         disableLocalStorage
         defaultValue={content}
         className="rounded-none"
