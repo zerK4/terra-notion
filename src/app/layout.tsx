@@ -20,24 +20,21 @@ export default async function RootLayout({
 }>) {
   const user = await currentUser();
 
-  if (user === null) {
-    redirect('/login');
+  if (user !== null) {
+    const exists = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, user.emailAddresses[0].emailAddress));
+
+    if (exists.length === 0) {
+      await db.insert(users).values({
+        email: user.emailAddresses[0].emailAddress,
+        id: user.id,
+        first_name: user.firstName,
+        last_name: user.lastName,
+      });
+    }
   }
-
-  const exists = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, user.emailAddresses[0].emailAddress));
-
-  if (exists.length === 0) {
-    await db.insert(users).values({
-      email: user.emailAddresses[0].emailAddress,
-      id: user.id,
-      first_name: user.firstName,
-      last_name: user.lastName,
-    });
-  }
-
   return (
     <html suppressHydrationWarning={true} lang="en" className="dark-theme">
       <body className="overflow-x-hidden" suppressHydrationWarning={true}>
