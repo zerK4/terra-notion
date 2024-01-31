@@ -15,7 +15,12 @@ export const getNavStories = async () => {
       redirect('/login');
     }
 
-    const stories = await db
+    const stories: {
+      id: string;
+      title: string;
+      icon: any;
+      sharedLink: string | null;
+    }[] = await db
       .select({
         id: pages.id,
         title: pages.name,

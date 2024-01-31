@@ -1,39 +1,23 @@
-'use client';
-
-import Image from 'next/image';
-import { useUser } from '@clerk/clerk-react';
 import { PlusCircle } from 'lucide-react';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/src/components/ui/button';
+import { currentUser } from '@clerk/nextjs';
+import { createStory, getNavStories } from './actions/storyActions';
+import CreateButton from '../components/createButton';
+import Link from 'next/link';
 
-const DocumentsPage = () => {
-  const router = useRouter();
-  const { user } = useUser();
+const DocumentsPage = async () => {
+  const user = await currentUser();
+  const { stories } = await getNavStories();
 
   return (
-    <div className="h-full flex flex-col items-center justify-center space-y-4">
-      <Image
-        src="/empty.png"
-        height="300"
-        width="300"
-        alt="Empty"
-        className="dark:hidden"
-      />
-      <Image
-        src="/empty-dark.png"
-        height="300"
-        width="300"
-        alt="Empty"
-        className="hidden dark:block"
-      />
+    <div className="h-full flex flex-col items-center justify-center space-y-4 min-h-screen">
       <h2 className="text-lg font-medium">
         Welcome to {user?.firstName}&apos;s Jotion
       </h2>
-      <Button>
-        <PlusCircle className="h-4 w-4 mr-2" />
-        Create a note
-      </Button>
+      {stories.length !== 0 && (
+        <Link href={`/${stories[0].id}`}>{stories[0].title}</Link>
+      )}
+      <CreateButton />
     </div>
   );
 };
