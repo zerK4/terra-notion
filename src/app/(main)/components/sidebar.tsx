@@ -13,7 +13,7 @@ import { sidebarMenu } from '@/src/menus/sidebar';
 
 function Sidebar({ stories }: { stories: string }) {
   const { isClosed, tempShow } = sidebarStore();
-  const [showStories, setShowStories] = useState<boolean>();
+  const [showStories, setShowStories] = useState<boolean>(true);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [myStories, setMyStories] = useState<NavStories[]>();
   const router = useRouter();

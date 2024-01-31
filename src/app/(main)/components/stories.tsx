@@ -2,21 +2,24 @@ import { IconPicker } from '@/src/components/IconPicker';
 import { NavStories } from '@/src/interfaces/story';
 import { FileTextIcon, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { updatePageIcon } from '../../actions/storyActions';
+import { usePathname } from 'next/navigation';
 
 function Stories({ stories }: { stories?: NavStories[] }) {
+  const pathName = usePathname();
   const handleEmojiUpdate = async (e: any, id: string) => {
-    const icon = await updatePageIcon({ icon: e, pageId: id });
+    await updatePageIcon({ icon: e, pageId: id });
   };
+
   return (
-    <div className="w-full overflow-hidden mt-1 flex flex-col gap-1">
+    <div className="w-full overflow-hidden mt-1 flex flex-col gap-1 max-h-[30vh] overflow-y-scroll">
       {stories !== undefined &&
         stories.length !== 0 &&
         stories?.map(({ id, title, icon }) => (
           <button
             key={id}
-            className="group/story px-2 pl-10 pr-4 py-0.5 hover:bg-accent w-full text-left flex items-center justify-between ease-in-out duration-300"
+            className={`${pathName === `/${id}` && 'bg-accent'} group/story px-2 pl-10 pr-4 py-0.5 hover:bg-accent w-full text-left flex items-center justify-between ease-in-out duration-300`}
           >
             <div className="flex items-center gap-2">
               <IconPicker asChild onChange={(e) => handleEmojiUpdate(e, id)}>
