@@ -1,8 +1,12 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/src/components/theme-provider';
-import { ClerkProvider } from '@clerk/nextjs';
+import { ClerkProvider, currentUser } from '@clerk/nextjs';
 import { Toaster } from '../components/ui/sonner';
+import { db } from '../db';
+import { users } from '../db/schema';
+import { redirect } from 'next/navigation';
+import { eq } from 'drizzle-orm';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -14,6 +18,24 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await currentUser();
+
+  if (user === null) {
+    redirect('/login');
+  }
+
+  const exists = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, user.emailAddresses[0].emailAddress));
+
+  if (exists.length === 0) {
+    await db.insert(users).values({
+      email: user.emailAddresses[0].emailAddress,
+      id: user.id,
+    });
+  }
+
   return (
     <html suppressHydrationWarning={true} lang="en" className="dark-theme">
       <body className="overflow-x-hidden" suppressHydrationWarning={true}>
