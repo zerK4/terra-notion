@@ -60,6 +60,7 @@ async function page({ params }: { params: { story: string } }) {
         </div>
       )}
       <TextEditor
+        editable={true}
         sharedLink={sharedLink}
         id={params.story}
         content={content}

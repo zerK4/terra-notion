@@ -12,12 +12,14 @@ export default function TextEditor({
   id,
   updated,
   sharedLink,
+  editable,
 }: {
   content: any;
   name: string;
   id: string;
   updated: number;
   sharedLink: string | null;
+  editable: boolean;
 }) {
   const justSave = useRef<NodeJS.Timeout>();
   const { autoSave } = editorStore();
@@ -28,6 +30,9 @@ export default function TextEditor({
   }, [updated, name, id, sharedLink]);
 
   const handleSaving = async (e?: EditorType) => {
+    if (!editable) {
+      return;
+    }
     if (autoSave) {
       if (justSave.current) {
         clearTimeout(justSave.current);
@@ -56,6 +61,9 @@ export default function TextEditor({
     }
   };
   const handleUpdate = (e?: EditorType) => {
+    if (!editable) {
+      return;
+    }
     if (e?.getJSON().content![0].type !== 'heading') {
       e
         ?.chain()
@@ -80,6 +88,9 @@ export default function TextEditor({
   return (
     <div className="w-[100vw] md:w-[60vw]">
       <Editor
+        editorProps={{
+          editable: () => editable,
+        }}
         onUpdate={(e) => handleUpdate(e as any)}
         disableLocalStorage
         defaultValue={content}

@@ -1,7 +1,5 @@
-import { PlusCircle } from 'lucide-react';
-import { Button } from '@/src/components/ui/button';
 import { currentUser } from '@clerk/nextjs';
-import { createStory, getNavStories } from './actions/storyActions';
+import { getNavStories } from './actions/storyActions';
 import CreateButton from '../components/createButton';
 import Link from 'next/link';
 
