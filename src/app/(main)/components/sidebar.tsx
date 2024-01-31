@@ -55,7 +55,7 @@ function Sidebar({ stories }: { stories: string }) {
         onMouseLeave={() =>
           isClosed && !isMobile && sidebarStore.setState({ tempShow: false })
         }
-        className={`${isClosed ? '-translate-x-[100vw]' : ''} ${tempShow ? '!h-64 left-0 translate-x-0' : ''} fixed top-8 ease-in-out duration-300 z-[9999] group/sidebar left-0 min-h-screen bg-primary w-64 flex flex-col`}
+        className={`${isClosed ? '-translate-x-[100vw]' : ''} ${tempShow ? '!h-64 left-0 translate-x-0' : ''} fixed top-10 ease-in-out duration-300 z-[50] group/sidebar left-0 min-h-screen bg-primary w-64 flex flex-col`}
       >
         <UserComponent />
         <div className="w-full flex flex-col gap-0.5 items-start">

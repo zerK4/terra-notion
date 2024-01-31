@@ -20,6 +20,7 @@ export const getNavStories = async () => {
         id: pages.id,
         title: pages.name,
         icon: pages.icon,
+        sharedLink: pages.shared_link,
       })
       .from(pages)
       .where(eq(pages.user_id, user.emailAddresses[0].emailAddress));
@@ -138,6 +139,69 @@ export const updatePageIcon = async ({
     console.log(
       err.message,
       'Got an error updating the icon of the page on the controller.'
+    );
+
+    return err;
+  }
+};
+
+export const remove = async ({
+  what,
+  pageId,
+}: {
+  what: string;
+  pageId: string;
+}) => {
+  try {
+    const user = await currentUser();
+
+    if (user === null) {
+      redirect('/login');
+    }
+
+    const data = await db
+      .update(pages)
+      .set({
+        [what]: null,
+      })
+      .where(eq(pages.id, pageId))
+      .returning();
+
+    revalidatePath(`/${pageId}`);
+
+    return {
+      data,
+    };
+  } catch (err: any) {
+    console.log(err.message, 'Got an error removing from story.');
+    return err;
+  }
+};
+
+export const update = async ({
+  what,
+  data: items,
+  id,
+}: {
+  what: string;
+  data: string;
+  id: string;
+}) => {
+  try {
+    const item = await db
+      .update(pages)
+      .set({
+        [what]: items,
+      })
+      .where(eq(pages.id, id))
+      .returning();
+
+    revalidatePath(`/${id}`);
+    return { data: item };
+  } catch (err: any) {
+    console.log(
+      err.message,
+      'Got an error updating the page on the controller.'
     );
 
     return err;

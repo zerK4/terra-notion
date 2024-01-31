@@ -14,6 +14,7 @@ const getStories = async (params: any) => {
       updatedAt: pages.updated_at,
       coverImage: pages.cover_image,
       icon: pages.icon,
+      sharedLink: pages.shared_link,
     })
     .from(pages)
     .where(eq(pages.id, params.story));
@@ -25,10 +26,11 @@ const getStories = async (params: any) => {
       updatedAt: '',
       coverImage: '',
       icon: null,
+      sharedLink: null,
     };
   }
 
-  const { content, name, updatedAt, coverImage, icon } = story[0];
+  const { content, name, updatedAt, coverImage, icon, sharedLink } = story[0];
 
   return {
     content,
@@ -36,20 +38,29 @@ const getStories = async (params: any) => {
     updatedAt,
     coverImage,
     icon,
+    sharedLink,
   };
 };
 
 async function page({ params }: { params: { story: string } }) {
-  const { content, name, updatedAt, coverImage, icon } =
+  const { content, name, updatedAt, coverImage, icon, sharedLink } =
     await getStories(params);
 
   return (
     <div className="flex items-center flex-col">
-      <CoverImage name={name} coverImage={coverImage} id={params.story} />
-      <div className="relative w-[90vw] md:w-[60vw]">
-        <PageIcon icon={icon} id={params.story} />
-      </div>
+      <CoverImage
+        name={name}
+        coverImage={coverImage}
+        id={params.story}
+        icon={icon}
+      />
+      {icon !== null && (
+        <div className="relative md:px-8 -translate-y-16 w-[90vw] h-6 md:w-[60vw]">
+          <PageIcon icon={icon} id={params.story as string} />
+        </div>
+      )}
       <TextEditor
+        sharedLink={sharedLink}
         id={params.story}
         content={content}
         name={name}

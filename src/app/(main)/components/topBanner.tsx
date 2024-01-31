@@ -3,16 +3,28 @@
 import { Spinner } from '@/src/components/Spinner';
 import { getSaveDate } from '@/src/lib/utils';
 import { editorStore } from '@/src/store/editor';
+import { pageStore } from '@/src/store/page';
 import { sidebarStore } from '@/src/store/sidebar';
-import { CheckCircle2, ChevronsRight } from 'lucide-react';
-import React from 'react';
+import { CheckCircle2, ChevronsRight, LinkIcon } from 'lucide-react';
+import React, { useEffect } from 'react';
+import ShareDialog from './shareDialog';
+import { toast } from 'sonner';
 
 function TopBanner() {
   const { isClosed } = sidebarStore();
   const { saveDate, saved, isSaving } = editorStore();
+  const { pageName, pageId, sharedLink } = pageStore();
+
+  const handleCopyLink = () => {
+    const copy = `${window.location.origin}/shared/${sharedLink}`;
+    navigator.clipboard.writeText(copy);
+    toast('Copied to clipboard', {
+      description: `${copy}`,
+    });
+  };
 
   return (
-    <div className="w-screen h-8 bg-primary px-4 flex items-center justify-between">
+    <div className="w-screen h-10 bg-primary px-4 flex items-center justify-between fixed top-0 left-0 z-[9999]">
       <div className="flex items-center gap-2">
         {isClosed && (
           <button
@@ -26,16 +38,29 @@ function TopBanner() {
             <ChevronsRight className="" />
           </button>
         )}
-        <div className="opacity-50">Page title</div>
+        <div className="opacity-50 whitespace-nowrap max-w-[7rem] md:max-w-[fit-content] overflow-hidden">
+          {pageName}
+        </div>
       </div>
       <div className="flex items-center gap-4">
-        <span className="text-sm">Edited {getSaveDate(saveDate)}</span>
         {isSaving ? (
           <Spinner />
         ) : saved ? (
           <CheckCircle2 size={18} className="text-lime-400" />
         ) : null}
-        <span className="">Share</span>
+        <span className="text-sm">Edited {getSaveDate(saveDate)}</span>
+        <div className="flex items-center gap-1">
+          {sharedLink !== null ? (
+            <button
+              onClick={handleCopyLink}
+              className="h-6 w-6 flex items-center justify-center hover:bg-accent ease-in-out duration-300 rounded-sm"
+            >
+              <LinkIcon size={14} />
+            </button>
+          ) : (
+            <ShareDialog pageId={pageId} pageTitle={pageName} />
+          )}
+        </div>
       </div>
     </div>
   );

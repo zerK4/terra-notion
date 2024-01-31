@@ -5,23 +5,27 @@ import { useEffect, useRef } from 'react';
 import { Editor as EditorType } from '@tiptap/core';
 import { editorStore } from '../store/editor';
 import { updatePage } from '../app/actions/storyActions';
+import { pageStore } from '../store/page';
 export default function TextEditor({
   content,
   name,
   id,
   updated,
+  sharedLink,
 }: {
   content: any;
   name: string;
   id: string;
   updated: number;
+  sharedLink: string | null;
 }) {
   const justSave = useRef<NodeJS.Timeout>();
-  const { autoSave, saveDate, saved, isSaving } = editorStore();
+  const { autoSave } = editorStore();
 
   useEffect(() => {
     editorStore.setState({ saveDate: updated });
-  }, [updated]);
+    pageStore.setState({ pageName: name, pageId: id, sharedLink: sharedLink });
+  }, [updated, name, id]);
 
   const handleSaving = async (e?: EditorType) => {
     if (autoSave) {
