@@ -5,8 +5,8 @@ import { ClerkProvider, currentUser } from '@clerk/nextjs';
 import { Toaster } from '../components/ui/sonner';
 import { db } from '../db';
 import { users } from '../db/schema';
-import { redirect } from 'next/navigation';
 import { eq } from 'drizzle-orm';
+import { ThemeToggle } from '../components/theme-toggle';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -48,6 +48,7 @@ export default async function RootLayout({
             <div className="bg-secondary min-h-screen">{children}</div>
             <Toaster position="top-right" />
           </ClerkProvider>
+          <ThemeToggle />
         </ThemeProvider>
       </body>
     </html>

@@ -37,14 +37,14 @@ function StoryDropMenu({ id }: { id: string }) {
             <span className="">Delete</span>
           </button>
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center">
+        {/* <DropdownMenuItem className="flex items-center">
           <button className="w-full gap-2 flex items-center hover:bg-primary px-2 py-1 rounded-md">
             <span className="">
               <PlusCircle size={14} />
             </span>
             <span className="">Add new</span>
           </button>
-        </DropdownMenuItem>
+        </DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

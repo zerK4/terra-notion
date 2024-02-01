@@ -41,7 +41,6 @@ function ArchivedStories({ totalArchived }: { totalArchived: number | null }) {
           </span>
           <span className="">Archived</span>
         </div>
-        <span className="">{totalArchived}</span>
         <span
           className={`${isOpen && '-rotate-90'} ease-in-out duration-300 px-1.5`}
         >

@@ -20,7 +20,7 @@ function Stories({ stories }: { stories?: NavStories[] }) {
         stories?.map(({ id, title, icon }) => (
           <button
             key={id}
-            className={`${pathName === `/${id}` && 'bg-accent'} group/story px-2 pl-10 pr-4 py-0.5 hover:bg-accent w-full text-left flex items-center justify-between ease-in-out duration-300`}
+            className={`${pathName === `/${id}` && 'bg-accent'} group/story px-2 pl-10 pr-4 py-0.5 hover:bg-accent w-full text-left flex items-center justify-between ease-in-out duration-300 rounded-md`}
           >
             <div className="flex items-center gap-2">
               <IconPicker asChild onChange={(e) => handleEmojiUpdate(e, id)}>

@@ -30,6 +30,7 @@ export const getNavStories = async () => {
       .from(pages)
       .where(eq(pages.user_id, user.emailAddresses[0].emailAddress));
 
+    revalidatePath('/');
     return {
       stories,
     };
@@ -93,7 +94,7 @@ export async function updatePage(data: string) {
 
     const updateDate = new Date();
     const json = JSON.parse(data as any);
-    const page = await db
+    const currentPage = await db
       .update(pages)
       .set({
         name: json.pageTitle.length === 0 ? 'Page title' : json.pageTitle,
@@ -103,9 +104,11 @@ export async function updatePage(data: string) {
       .where(eq(pages.id, json.pageId))
       .returning();
 
-    console.log(`/${json.path} to revalidated`);
+    console.log(`/${currentPage[0].id}`);
 
-    revalidatePath(`/`);
+    revalidatePath(`/${currentPage[0].id}`);
+
+    return currentPage[0];
   } catch (err: any) {
     console.log(err.message, 'Got an error sending a new page to the server.');
 
@@ -346,9 +349,6 @@ export const removeArchived = async (id: string) => {
       .from(users)
       .where(eq(users.email, user.emailAddresses[0].emailAddress));
     await db.delete(archived).where(eq(archived.id, id));
-    await db
-      .update(users)
-      .set({ total_archived: current[0].total_archived! - 1 });
 
     revalidatePath('/');
   } catch (err: any) {

@@ -63,7 +63,7 @@ function SearchComponent() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="p-1 px-4 hover:bg-accent ease-in-out duration-300 w-full text-start flex items-center gap-2">
+        <button className="p-1 px-4 hover:bg-accent ease-in-out duration-300 w-full text-start flex items-center gap-2 rounded-md">
           <span className="">
             <SearchIcon size={16} />
           </span>

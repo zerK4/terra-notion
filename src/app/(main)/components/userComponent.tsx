@@ -26,7 +26,7 @@ export function UserComponent({ isMobile }: { isMobile: boolean }) {
             onClick={() => sidebarStore.setState({ isClosed: false })}
             className="border-none text-foreground outline-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none hover:bg-accent w-full flex justify-start"
           >
-            {user?.firstName}
+            <span className="text-foreground">{user?.firstName}</span>
           </Button>
         </DropdownMenuTrigger>
         {!isClosed && (
