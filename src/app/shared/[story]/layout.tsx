@@ -20,12 +20,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export const SharedLayout = async ({
+export default async function SharedLayout({
   children,
 }: {
   children: React.ReactNode;
-}) => {
+}) {
   return <div className="">{children}</div>;
-};
-
-export default SharedLayout;
+}
