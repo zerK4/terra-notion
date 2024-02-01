@@ -7,17 +7,23 @@ import { UserComponent } from './userComponent';
 import { Separator } from '@/src/components/ui/separator';
 import Stories from './stories';
 import { useMediaQuery } from 'usehooks-ts';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { NavStories } from '@/src/interfaces/story';
 import { sidebarMenu } from '@/src/menus/sidebar';
+import ArchivedStories from './archivedStories';
 
-function Sidebar({ stories }: { stories: string }) {
+function Sidebar({
+  stories,
+  totalArchived,
+}: {
+  stories: string;
+  totalArchived: number | null;
+}) {
   const { isClosed, tempShow } = sidebarStore();
   const [showStories, setShowStories] = useState<boolean>(true);
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [myStories, setMyStories] = useState<NavStories[]>();
   const router = useRouter();
-  const pathName = usePathname();
 
   useEffect(() => {
     setMyStories(JSON.parse(stories));
@@ -84,11 +90,15 @@ function Sidebar({ stories }: { stories: string }) {
                 </span>
                 <span className="">My Stories</span>
               </div>
-              <span className="h-6 w-6 rounded-md hover:bg-primary ease-in-out duration-300 flex items-center justify-center">
+              <span
+                onClick={(e) => e.stopPropagation()}
+                className="h-6 w-6 rounded-md hover:bg-primary ease-in-out duration-300 flex items-center justify-center"
+              >
                 <PlusIcon size={16} />
               </span>
             </button>
             {showStories && <Stories stories={myStories} />}
+            <ArchivedStories totalArchived={totalArchived} />
           </div>
         </div>
       </aside>

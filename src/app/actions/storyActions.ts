@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/src/db';
-import { pages } from '@/src/db/schema';
+import { archived, pages, users } from '@/src/db/schema';
 import { currentUser } from '@clerk/nextjs';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -208,6 +208,117 @@ export const update = async ({
       err.message,
       'Got an error updating the page on the controller.'
     );
+
+    return err;
+  }
+};
+
+export async function removePage(id: string) {
+  try {
+    const page = await db.select().from(pages).where(eq(pages.id, id));
+    const nextPage = await db.select().from(pages);
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, page[0].user_id));
+
+    const archivedPage = {
+      name: page[0].name,
+      updated_at: page[0].updated_at,
+      user_id: page[0].user_id,
+      json: page[0].json,
+    };
+    const data = await db.insert(archived).values(archivedPage).returning();
+
+    const updatedUser = await db
+      .update(users)
+      .set({
+        total_archived:
+          user[0].total_archived === null ? 1 : user[0].total_archived + 1,
+      })
+      .returning();
+
+    await db.delete(pages).where(eq(pages.id, id));
+
+    revalidatePath(`/${nextPage[0].id}`);
+
+    return {
+      data: { ...data },
+      redirect: `/${nextPage[0].id}`,
+      length: updatedUser[0].total_archived,
+      message: 'Page moved to trash successfully!',
+    };
+  } catch (err: any) {
+    console.log(err.message);
+    return err;
+  }
+}
+
+export const getArchivedStories = async () => {
+  try {
+    const user = await currentUser();
+
+    if (user === null) {
+      redirect('/login');
+    }
+
+    const data = await db
+      .select()
+      .from(archived)
+      .where(eq(archived.user_id, user.emailAddresses[0].emailAddress));
+
+    return {
+      data,
+    };
+  } catch (err: any) {
+    console.log(err.message, 'Cannot get archives on page.controller.ts');
+
+    return err;
+  }
+};
+
+export const unarchiveStory = async (id: string) => {
+  try {
+    const archivedPage = await db
+      .select()
+      .from(archived)
+      .where(eq(archived.id, id));
+    const user = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, archivedPage[0].user_id));
+
+    const data = await db
+      .insert(pages)
+      .values({
+        name: archivedPage[0].name,
+        updated_at: archivedPage[0].updated_at,
+        user_id: archivedPage[0].user_id,
+        json: archivedPage[0].json,
+      })
+      .returning();
+
+    const userPages = await db
+      .update(users)
+      .set({
+        total_archived:
+          user[0].total_archived !== null
+            ? ((user[0].total_archived - 1) as number)
+            : null,
+      })
+      .returning();
+
+    await db.delete(archived).where(eq(archived.id, id));
+
+    revalidatePath('/');
+
+    return {
+      data: { ...data },
+      length: userPages[0].total_archived,
+      message: 'Page unarchived successfully!',
+    };
+  } catch (err: any) {
+    console.log(err.message, 'Cannot unarchive pave.');
 
     return err;
   }

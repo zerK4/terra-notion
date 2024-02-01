@@ -1,10 +1,11 @@
 import { IconPicker } from '@/src/components/IconPicker';
 import { NavStories } from '@/src/interfaces/story';
-import { FileTextIcon, PlusIcon } from 'lucide-react';
+import { FileTextIcon, MoreHorizontal, PlusIcon } from 'lucide-react';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { updatePageIcon } from '../../actions/storyActions';
 import { usePathname } from 'next/navigation';
+import StoryDropMenu from './storyDropMenu';
 
 function Stories({ stories }: { stories?: NavStories[] }) {
   const pathName = usePathname();
@@ -38,9 +39,7 @@ function Stories({ stories }: { stories?: NavStories[] }) {
                 <span>{title}</span>
               </Link>
             </div>
-            <span className="group-hover/story:opacity-100 opacity-0 h-6 w-6 rounded-md flex items-center justify-center hover:bg-primary ease-in-out duration-300">
-              <PlusIcon size={14} />
-            </span>
+            <StoryDropMenu id={id} />
           </button>
         ))}
     </div>
