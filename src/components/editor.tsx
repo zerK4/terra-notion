@@ -57,7 +57,7 @@ export default function TextEditor({
             })
           );
         }, 0);
-      }, 2000);
+      }, 500);
     }
   };
   const handleUpdate = (e?: EditorType) => {
