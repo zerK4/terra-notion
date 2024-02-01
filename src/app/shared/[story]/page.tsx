@@ -1,10 +1,8 @@
 import { db } from '@/src/db';
 import { pages } from '@/src/db/schema';
-import { Editor } from '@tiptap/core';
 import { eq } from 'drizzle-orm';
 import Image from 'next/image';
 import React from 'react';
-import SharedTiptap from '../components/sharedEditor';
 import TextEditor from '@/src/components/editor';
 
 async function page({ params }: { params: { story: string } }) {

@@ -52,7 +52,7 @@ export default function TextEditor({
             JSON.stringify({
               path: id,
               pageId: id,
-              pageTitle: e!.getJSON().content![0].content![0].text as string,
+              pageTitle: e!.getJSON().content![0]?.content![0]?.text || '',
               json: e?.getJSON(),
             })
           );
