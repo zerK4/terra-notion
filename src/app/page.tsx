@@ -9,9 +9,7 @@ const DocumentsPage = async () => {
 
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4 min-h-screen">
-      <h2 className="text-lg font-medium">
-        Welcome to {user?.firstName}&apos;s Jotion
-      </h2>
+      <h2 className="text-lg font-medium">Welcome {user?.firstName}</h2>
       {stories.length !== 0 && (
         <Link href={`/${stories[0].id}`}>{stories[0].title}</Link>
       )}

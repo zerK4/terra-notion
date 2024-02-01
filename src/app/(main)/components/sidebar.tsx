@@ -1,7 +1,7 @@
 'use client';
 
 import { sidebarStore } from '@/src/store/sidebar';
-import { ChevronRight, ChevronsLeft, PlusIcon } from 'lucide-react';
+import { ChevronRight, PlusIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { UserComponent } from './userComponent';
 import { Separator } from '@/src/components/ui/separator';
@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { NavStories } from '@/src/interfaces/story';
 import { sidebarMenu } from '@/src/menus/sidebar';
 import ArchivedStories from './archivedStories';
+import SearchComponent from './searchComponent';
 
 function Sidebar({
   stories,
@@ -66,14 +67,20 @@ function Sidebar({
         <UserComponent isMobile={isMobile} />
         <div className="w-full flex flex-col gap-0.5 items-start">
           {sidebarMenu.map(({ name, icon, action }) => (
-            <button
-              className="p-1 px-4 hover:bg-accent ease-in-out duration-300 w-full text-start flex items-center gap-2"
-              key={name}
-              onClick={(e) => action(e, router)}
-            >
-              <span className="">{icon}</span>
-              <span className="">{name}</span>
-            </button>
+            <div key={name} className="w-full">
+              {name === 'Search' ? (
+                <SearchComponent />
+              ) : (
+                <button
+                  className="p-1 px-4 hover:bg-accent ease-in-out duration-300 w-full text-start flex items-center gap-2"
+                  key={name}
+                  onClick={(e) => action(e, router)}
+                >
+                  <span className="">{icon}</span>
+                  <span className="">{name}</span>
+                </button>
+              )}
+            </div>
           ))}
           <Separator className="my-2" />
           <div className="w-full">
