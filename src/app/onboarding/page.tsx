@@ -24,10 +24,6 @@ async function Page() {
     );
 
   if (exists.length > 0) {
-    await db.update(users).set({
-      id: user.id,
-      email: user.emailAddresses[0].emailAddress,
-    });
     redirect('/');
   }
 
