@@ -4,10 +4,10 @@ import {
   DialogTrigger,
 } from '@/src/components/ui/dialog';
 import { StoryInterface } from '@/src/interfaces/story';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import TextEditor from '@/src/components/editor';
-import { ArchiveRestore } from 'lucide-react';
-import { unarchiveStory } from '../../actions/storyActions';
+import { ArchiveRestore, Trash } from 'lucide-react';
+import { removeArchived, unarchiveStory } from '../../actions/storyActions';
 
 function StoryDialog({
   story,
@@ -21,14 +21,28 @@ function StoryDialog({
     setFilter(story.id);
   };
 
+  const handleRemove = async (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    await removeArchived(story.id);
+    setFilter(story.id);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button
-          className={`group/story px-2 pl-10 pr-4 py-0.5 hover:bg-accent w-full text-left flex items-center justify-between ease-in-out duration-300`}
-        >
-          {story.name}
-        </button>
+        <div className="px-2 flex items-center justify-between">
+          <button
+            className={`pl-10 pr-4 py-0.5 hover:bg-accent w-full text-left flex items-center justify-between ease-in-out duration-300`}
+          >
+            {story.name}
+          </button>
+          <button
+            onClick={(e) => handleRemove(e)}
+            className="h-6 w-6 flex items-center justify-center rounded-md hover:bg-red-500"
+          >
+            <Trash size={14} />
+          </button>
+        </div>
       </DialogTrigger>
       <DialogContent className="border border-primary !min-w-[70vw] h-[70vh] overflow-x-hidden overflow-y-auto flex flex-col gap-1 p-0">
         <div className="h-12 flex items-center px-2">

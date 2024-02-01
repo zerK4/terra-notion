@@ -215,8 +215,17 @@ export const update = async ({
 
 export async function removePage(id: string) {
   try {
+    let redirectId = null;
+    const allPages = await db.select().from(pages);
     const page = await db.select().from(pages).where(eq(pages.id, id));
-    const nextPage = await db.select().from(pages);
+
+    const currentIndex = allPages.findIndex((p) => p.id === id);
+    if (currentIndex === allPages.length - 1) {
+      redirectId = allPages[currentIndex - 1].id;
+    } else {
+      redirectId = allPages[currentIndex + 1].id;
+    }
+
     const user = await db
       .select()
       .from(users)
@@ -240,11 +249,11 @@ export async function removePage(id: string) {
 
     await db.delete(pages).where(eq(pages.id, id));
 
-    revalidatePath(`/${nextPage[0].id}`);
+    revalidatePath(`/${redirectId}`);
 
     return {
       data: { ...data },
-      redirect: `/${nextPage[0].id}`,
+      redirect: `/${redirectId}`,
       length: updatedUser[0].total_archived,
       message: 'Page moved to trash successfully!',
     };
@@ -320,6 +329,30 @@ export const unarchiveStory = async (id: string) => {
   } catch (err: any) {
     console.log(err.message, 'Cannot unarchive pave.');
 
+    return err;
+  }
+};
+
+export const removeArchived = async (id: string) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) {
+      redirect('/login');
+    }
+
+    const current = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, user.emailAddresses[0].emailAddress));
+    await db.delete(archived).where(eq(archived.id, id));
+    await db
+      .update(users)
+      .set({ total_archived: current[0].total_archived! - 1 });
+
+    revalidatePath('/');
+  } catch (err: any) {
+    console.log(err.message, 'got an error removing the archived.');
     return err;
   }
 };
