@@ -13,7 +13,7 @@ import { useClerk, useUser } from '@clerk/clerk-react';
 import { useRouter } from 'next/navigation';
 import { sidebarStore } from '@/src/store/sidebar';
 
-export function UserComponent() {
+export function UserComponent({ isMobile }: { isMobile: boolean }) {
   const { signOut } = useClerk();
   const { isClosed } = sidebarStore();
   const { user } = useUser();

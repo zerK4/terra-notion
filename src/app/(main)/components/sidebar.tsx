@@ -1,7 +1,7 @@
 'use client';
 
 import { sidebarStore } from '@/src/store/sidebar';
-import { ChevronRight, PlusIcon } from 'lucide-react';
+import { ChevronRight, ChevronsLeft, PlusIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { UserComponent } from './userComponent';
 import { Separator } from '@/src/components/ui/separator';
@@ -61,9 +61,9 @@ function Sidebar({
         onMouseLeave={() =>
           isClosed && !isMobile && sidebarStore.setState({ tempShow: false })
         }
-        className={`${isClosed ? '-translate-x-[100vw]' : ''} ${tempShow ? '!h-[20rem] left-0 translate-x-0' : ''} fixed top-10 ease-in-out duration-300 z-[50] group/sidebar left-0 min-h-screen bg-primary w-[20rem] flex flex-col`}
+        className={`${isClosed ? '-translate-x-[100vw]' : ''} ${tempShow ? '!h-[20rem] left-0 translate-x-0' : ''} ${isMobile && !isClosed && 'w-screen'} fixed top-10 ease-in-out duration-300 z-[50] group/sidebar left-0 min-h-screen bg-primary w-[20rem] flex flex-col`}
       >
-        <UserComponent />
+        <UserComponent isMobile={isMobile} />
         <div className="w-full flex flex-col gap-0.5 items-start">
           {sidebarMenu.map(({ name, icon, action }) => (
             <button
