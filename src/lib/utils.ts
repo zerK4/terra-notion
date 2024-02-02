@@ -25,3 +25,14 @@ export const copy = (link: string) => {
 
   return true;
 };
+
+export function generateStrongToken(length: number = 64): string {
+  const alphabet: string =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let token: string = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex: number = Math.floor(Math.random() * alphabet.length);
+    token += alphabet.charAt(randomIndex);
+  }
+  return token;
+}

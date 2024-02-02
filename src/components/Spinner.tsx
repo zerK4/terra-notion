@@ -9,6 +9,7 @@ const spinnerVariants = cva('animate-spin', {
     color: {
       default: 'text-white/70',
       black: 'text-black dark:text-white',
+      blackB: 'dark:text-black text-white',
     },
     size: {
       default: 'h-4 w-4',

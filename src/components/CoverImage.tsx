@@ -5,9 +5,8 @@ import Image from 'next/image';
 import { uploadFiles } from '@/src/app/actions/uploadActions';
 import { useEffect, useState } from 'react';
 import { Spinner } from '@/src/components/Spinner';
-import { useUser } from '@clerk/clerk-react';
 import { remove } from '../app/actions/storyActions';
-import PageIcon from '../app/(main)/components/pageIcon';
+import { useAuthStore } from '../store/auth';
 
 function CoverImage({
   name,
@@ -22,7 +21,7 @@ function CoverImage({
 }) {
   const [img, setImg] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const { user } = useUser();
+  const { user } = useAuthStore();
 
   useEffect(() => {
     setImg(coverImage);
@@ -43,7 +42,7 @@ function CoverImage({
         setImg(reader.result as string);
       };
 
-      uploadFiles(formData, name!, user?.lastName as string, id!);
+      uploadFiles(formData, name!, user?.name as string, id!);
     } catch (err: any) {
       console.log(err.message, 'error here');
     }

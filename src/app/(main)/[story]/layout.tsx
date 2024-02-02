@@ -6,16 +6,16 @@ import { CommandMenu } from '../components/commandMenu';
 import { db } from '@/src/db';
 import { pages, users } from '@/src/db/schema';
 import { and, eq } from 'drizzle-orm';
-import { currentUser } from '@clerk/nextjs';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
+import { getSession } from '../../actions/authActions';
 
 type Props = {
   params: { story: string };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const user = await currentUser();
+  const { user } = await getSession();
 
   if (!user) {
     redirect('/sign-in');
@@ -24,12 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await db
     .select()
     .from(pages)
-    .where(
-      and(
-        eq(pages.id, params.story),
-        eq(pages?.user_id, user?.emailAddresses[0].emailAddress as string)
-      )
-    );
+    .where(and(eq(pages.id, params.story), eq(pages?.user_id, user.id)));
 
   return {
     title: data[0]?.name || 'Page title',
@@ -37,10 +32,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const user = await currentUser();
-
-  if (!user) {
-    return;
+  const { user } = await getSession();
+  console.log(user, 'the user');
+  if (user === null) {
+    redirect('/login');
   }
 
   const { stories } = await getNavStories();
@@ -49,7 +44,7 @@ async function DashboardLayout({ children }: { children: React.ReactNode }) {
       totalArchived: users.total_archived,
     })
     .from(users)
-    .where(eq(users.email, user?.emailAddresses[0].emailAddress));
+    .where(eq(users.id, user.id));
 
   const { totalArchived } = data[0];
 

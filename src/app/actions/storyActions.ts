@@ -2,16 +2,16 @@
 
 import { db } from '@/src/db';
 import { archived, pages, users } from '@/src/db/schema';
-import { currentUser } from '@clerk/nextjs';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { getSession } from './authActions';
 
 export const getNavStories = async () => {
   try {
-    const user = await currentUser();
+    const { user } = await getSession();
 
-    if (user === null) {
+    if (!user) {
       redirect('/login');
     }
 
@@ -28,7 +28,7 @@ export const getNavStories = async () => {
         sharedLink: pages.shared_link,
       })
       .from(pages)
-      .where(eq(pages.user_id, user.emailAddresses[0].emailAddress));
+      .where(eq(pages.user_id, user.id));
 
     revalidatePath('/');
     return {
@@ -43,13 +43,13 @@ export const getNavStories = async () => {
 
 export const createStory = async () => {
   try {
-    const user = await currentUser();
+    const { user } = await getSession();
 
-    if (user === null) {
+    if (!user) {
       redirect('/login');
     }
 
-    const email = user.emailAddresses[0].emailAddress;
+    const email = user.id;
 
     const updateDate = new Date();
 
@@ -87,8 +87,8 @@ export const createStory = async () => {
 
 export async function updatePage(data: string) {
   try {
-    const user = await currentUser();
-    if (user === null) {
+    const { user } = await getSession();
+    if (!user) {
       redirect('/login');
     }
 
@@ -124,9 +124,9 @@ export const updatePageIcon = async ({
   icon: any;
 }) => {
   try {
-    const user = await currentUser();
+    const { user } = await getSession();
 
-    if (user === null) {
+    if (!user) {
       redirect('/login');
     }
 
@@ -161,9 +161,9 @@ export const remove = async ({
   pageId: string;
 }) => {
   try {
-    const user = await currentUser();
+    const { user } = await getSession();
 
-    if (user === null) {
+    if (!user) {
       redirect('/login');
     }
 
@@ -268,16 +268,16 @@ export async function removePage(id: string) {
 
 export const getArchivedStories = async () => {
   try {
-    const user = await currentUser();
+    const { user } = await getSession();
 
-    if (user === null) {
+    if (!user) {
       redirect('/login');
     }
 
     const data = await db
       .select()
       .from(archived)
-      .where(eq(archived.user_id, user.emailAddresses[0].emailAddress));
+      .where(eq(archived.user_id, user.id));
 
     return {
       data,
@@ -338,7 +338,7 @@ export const unarchiveStory = async (id: string) => {
 
 export const removeArchived = async (id: string) => {
   try {
-    const user = await currentUser();
+    const { user } = await getSession();
 
     if (!user) {
       redirect('/login');
@@ -347,7 +347,7 @@ export const removeArchived = async (id: string) => {
     const current = await db
       .select()
       .from(users)
-      .where(eq(users.email, user.emailAddresses[0].emailAddress));
+      .where(eq(users.email, user.id));
     await db.delete(archived).where(eq(archived.id, id));
 
     revalidatePath('/');

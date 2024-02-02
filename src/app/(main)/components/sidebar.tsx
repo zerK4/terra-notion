@@ -27,7 +27,9 @@ function Sidebar({
   const router = useRouter();
 
   useEffect(() => {
-    setMyStories(JSON.parse(stories));
+    if (stories !== undefined) {
+      setMyStories(JSON?.parse(stories));
+    }
   }, [stories]);
 
   useEffect(() => {

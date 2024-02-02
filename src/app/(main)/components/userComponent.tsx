@@ -9,14 +9,19 @@ import {
   DropdownMenuTrigger,
 } from '@/src/components/ui/dropdown-menu';
 import { ChevronsLeft } from 'lucide-react';
-import { useClerk, useUser } from '@clerk/clerk-react';
 import { useRouter } from 'next/navigation';
 import { sidebarStore } from '@/src/store/sidebar';
+import { useAuthStore } from '@/src/store/auth';
+import { useEffect } from 'react';
 
 export function UserComponent({ isMobile }: { isMobile: boolean }) {
-  const { signOut } = useClerk();
   const { isClosed } = sidebarStore();
-  const { user } = useUser();
+  const { logout, user } = useAuthStore();
+
+  useEffect(() => {
+    console.log(user, 'the user');
+  }, [user]);
+
   const router = useRouter();
   return (
     <DropdownMenu>
@@ -26,7 +31,7 @@ export function UserComponent({ isMobile }: { isMobile: boolean }) {
             onClick={() => sidebarStore.setState({ isClosed: false })}
             className="border-none text-foreground outline-none focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none hover:bg-accent w-full flex justify-start"
           >
-            <span className="text-foreground">{user?.firstName}</span>
+            <span className="text-foreground">{user?.name}</span>
           </Button>
         </DropdownMenuTrigger>
         {!isClosed && (
@@ -46,7 +51,7 @@ export function UserComponent({ isMobile }: { isMobile: boolean }) {
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() => signOut(() => router.push('/'))}
+          onClick={() => logout(() => router.push('/'))}
           className="cursor-pointer"
         >
           Log out
