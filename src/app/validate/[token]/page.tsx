@@ -1,18 +1,26 @@
 'use client';
 
-import { db } from '@/src/db';
-import { users } from '@/src/db/schema';
-import { eq } from 'drizzle-orm';
 import React, { useEffect } from 'react';
 import { validate } from '../../actions/authActions';
 import { Card, CardContent, CardHeader } from '@/src/components/ui/card';
 import { Spinner } from '@/src/components/Spinner';
+import { getNavStories } from '../../actions/storyActions';
+import { useRouter } from 'next/navigation';
 
 function Page({ params }: { params: { token: string } }) {
-  console.log(params.token, 'this is the token');
+  const router = useRouter();
 
   useEffect(() => {
-    validate(params.token);
+    validate(params.token).then(async (res) => {
+      const {stories} = await getNavStories();
+      console.log(stories, 'the data')
+
+      if (stories.length > 0) {
+        router.push(`/${stories[0].id}`);
+      } else {
+        router.push('/');
+      }
+    });
   }, [params.token]);
 
   return (

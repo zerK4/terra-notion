@@ -82,7 +82,7 @@ export async function login({
 
 export async function validate(token: string) {
   const [user] = await db.select().from(users).where(eq(users.token, token));
-  console.log(user, 'this is the user');
+
   if (user !== undefined) {
     const session = await lucia.createSession(user.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
@@ -92,7 +92,10 @@ export async function validate(token: string) {
       sessionCookie.attributes
     );
 
-    redirect('/');
+    return {
+      success: true,
+      session
+    }
   }
 }
 
