@@ -13,7 +13,6 @@ function ArchivedStories({ totalArchived }: { totalArchived: number | null }) {
 
   const populateArchived = async () => {
     const data = await getArchivedStories();
-    console.log(data, 'this is data');
     setArchivedStories(data.data);
 
     return data;

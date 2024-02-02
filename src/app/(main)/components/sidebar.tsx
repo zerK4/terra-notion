@@ -12,6 +12,8 @@ import { NavStories } from '@/src/interfaces/story';
 import { handleCreate, sidebarMenu } from '@/src/menus/sidebar';
 import ArchivedStories from './archivedStories';
 import SearchComponent from './searchComponent';
+import { Spinner } from '@/src/components/Spinner';
+import { generalStore } from '@/src/store/general';
 
 function Sidebar({
   stories,
@@ -25,6 +27,7 @@ function Sidebar({
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [myStories, setMyStories] = useState<NavStories[]>();
   const router = useRouter();
+  const {loading} = generalStore();
 
   useEffect(() => {
     if (stories !== undefined) {
@@ -74,12 +77,15 @@ function Sidebar({
                 <SearchComponent />
               ) : (
                 <button
-                  className="p-1 px-4 hover:bg-accent ease-in-out duration-300 w-full text-start flex items-center gap-2 rounded-md"
+                  className="p-1 px-4 hover:bg-accent ease-in-out duration-300 w-full text-start flex items-center justify-between rounded-md"
                   key={name}
                   onClick={(e) => action(e, router)}
                 >
-                  <span className="">{icon}</span>
-                  <span className="">{name}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="">{icon}</span>
+                    <span className="">{name}</span>
+                  </div>
+                  {loading && name === "New story" && <Spinner />}
                 </button>
               )}
             </div>

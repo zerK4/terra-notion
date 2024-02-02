@@ -6,6 +6,7 @@ import { Editor as EditorType } from '@tiptap/core';
 import { editorStore } from '../store/editor';
 import { updatePage } from '../app/actions/storyActions';
 import { pageStore } from '../store/page';
+import { generalStore } from '../store/general';
 export default function TextEditor({
   content,
   name,
@@ -27,6 +28,7 @@ export default function TextEditor({
   useEffect(() => {
     editorStore.setState({ saveDate: updated });
     pageStore.setState({ pageName: name, pageId: id, sharedLink: sharedLink });
+    generalStore.setState({loading: false})
   }, [updated, name, id, sharedLink]);
 
   const handleSaving = async (e?: EditorType) => {

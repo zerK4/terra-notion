@@ -5,6 +5,7 @@ import { pages } from '@/src/db/schema';
 import { eq } from 'drizzle-orm';
 import React from 'react';
 import PageIcon from '../components/pageIcon';
+import { generalStore } from '@/src/store/general';
 
 const getStories = async (params: any) => {
   const story = await db

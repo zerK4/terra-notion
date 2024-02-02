@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user } = await getSession();
-  console.log(user, 'the user');
+
   if (user === null) {
     redirect('/login');
   }

@@ -1,6 +1,7 @@
 import { PlusIcon, SearchIcon, SettingsIcon } from 'lucide-react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { createStory } from '../app/actions/storyActions';
+import { generalStore } from '../store/general';
 
 export const handleCreate = async (e: any, router?: AppRouterInstance) => {
   const data = await createStory();
@@ -26,6 +27,7 @@ export const sidebarMenu = [
     icon: <PlusIcon size={16} />,
     action: async (e: any, router?: AppRouterInstance) => {
       await handleCreate(e, router);
+      generalStore.setState({ loading: true })
     },
   },
 ];

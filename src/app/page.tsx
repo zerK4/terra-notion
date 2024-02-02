@@ -21,8 +21,6 @@ const DocumentsPage = async () => {
 
   const { stories } = await getNavStories();
 
-  console.log(currentUser, 'the current user');
-
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4 min-h-screen">
       <h2 className="text-lg font-medium">Welcome {currentUser?.name}</h2>

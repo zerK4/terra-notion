@@ -45,8 +45,6 @@ export default async function RootLayout({
     .from(users)
     .where(eq(users.id, user.id));
 
-  console.log(currentUser, 'the user');
-
   return (
     <html suppressHydrationWarning={true} lang="en" className="dark-theme">
       <body className="overflow-x-hidden" suppressHydrationWarning={true}>

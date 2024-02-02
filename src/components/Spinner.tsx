@@ -7,7 +7,7 @@ import { cn } from '@/src/lib/utils';
 const spinnerVariants = cva('animate-spin', {
   variants: {
     color: {
-      default: 'text-white/70',
+      default: 'text-black dark:text-white/70',
       black: 'text-black dark:text-white',
       blackB: 'dark:text-black text-white',
     },

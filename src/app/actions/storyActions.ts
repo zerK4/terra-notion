@@ -242,13 +242,13 @@ export async function removePage(id: string) {
     };
     const data = await db.insert(archived).values(archivedPage).returning();
 
-    const updatedUser = await db
-      .update(users)
-      .set({
-        total_archived:
-          user[0].total_archived === null ? 1 : user[0].total_archived + 1,
-      })
-      .returning();
+    // const updatedUser = await db
+    //   .update(users)
+    //   .set({
+    //     total_archived:
+    //       user[0].total_archived === null ? 1 : user[0].total_archived + 1,
+    //   })
+    //   .returning();
 
     await db.delete(pages).where(eq(pages.id, id));
 
@@ -257,7 +257,7 @@ export async function removePage(id: string) {
     return {
       data: { ...data },
       redirect: `/${redirectId}`,
-      length: updatedUser[0].total_archived,
+      length: null,
       message: 'Page moved to trash successfully!',
     };
   } catch (err: any) {
@@ -310,15 +310,15 @@ export const unarchiveStory = async (id: string) => {
       })
       .returning();
 
-    const userPages = await db
-      .update(users)
-      .set({
-        total_archived:
-          user[0].total_archived !== null
-            ? ((user[0].total_archived - 1) as number)
-            : null,
-      })
-      .returning();
+    // const userPages = await db
+    //   .update(users)
+    //   .set({
+    //     total_archived:
+    //       user[0].total_archived !== null
+    //         ? ((user[0].total_archived - 1) as number)
+    //         : null,
+    //   })
+    //   .returning();
 
     await db.delete(archived).where(eq(archived.id, id));
 
@@ -326,7 +326,7 @@ export const unarchiveStory = async (id: string) => {
 
     return {
       data: { ...data },
-      length: userPages[0].total_archived,
+      length: null,
       message: 'Page unarchived successfully!',
     };
   } catch (err: any) {
