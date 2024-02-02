@@ -14,7 +14,7 @@ export async function sendLoginEmail({
     from: 'Terra <onboarding@webzster.com>',
     to: [to],
     subject: 'Authentication | Terra',
-    html: `<a href="${process.env.NEXT_PUBLIC_FE_URL}/validate/${token}">Login here</a>`
+    html: `<a href="${process.env.NEXT_PUBLIC_FE_URL}/validate/${token}">Login here</a>`,
   });
 
   if (error) {

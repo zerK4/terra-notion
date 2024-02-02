@@ -29,6 +29,8 @@ function Page() {
     try {
       setLoading(true);
 
+      values.email = values.email.toLowerCase();
+
       const data = await login(values);
       console.log(data);
       if (data.status === 200) {
