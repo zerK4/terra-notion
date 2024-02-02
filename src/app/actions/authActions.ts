@@ -6,14 +6,12 @@ import { db } from '@/src/db';
 import { users } from '@/src/db/schema';
 import { eq } from 'drizzle-orm';
 import { v4 } from 'uuid';
-// import { sendLoginEmail } from '@/src/lib/resend';
+import { sendLoginEmail } from '@/src/lib/resend';
 import { generateStrongToken } from '@/src/lib/utils';
 import { lucia } from '@/src/auth/lucia';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { cache } from 'react';
-
-// TODO
 
 export async function login({
   email,
@@ -45,7 +43,7 @@ export async function login({
 
   if (exists) {
     await db.update(users).set({ token }).where(eq(users.email, email));
-    // await sendLoginEmail({ to: String(email), token });
+    await sendLoginEmail({ to: String(email), token });
 
     return {
       status: 200,
@@ -65,7 +63,7 @@ export async function login({
 
     if (user !== undefined) {
       await db.update(users).set({ token }).where(eq(users.email, email));
-      // await sendLoginEmail({ to: String(email), token });
+      await sendLoginEmail({ to: String(email), token });
     }
 
     return {
