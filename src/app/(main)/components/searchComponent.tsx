@@ -28,7 +28,6 @@ function SearchComponent() {
 
     setStories(stories);
     setInitialStories(stories);
-    console.log(stories);
   };
 
   useEffect(() => {

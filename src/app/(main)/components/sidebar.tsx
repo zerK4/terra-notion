@@ -27,7 +27,7 @@ function Sidebar({
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [myStories, setMyStories] = useState<NavStories[]>();
   const router = useRouter();
-  const {loading} = generalStore();
+  const { loading } = generalStore();
 
   useEffect(() => {
     if (stories !== undefined) {
@@ -71,24 +71,8 @@ function Sidebar({
       >
         <UserComponent isMobile={isMobile} />
         <div className="w-full flex flex-col gap-0.5 items-start px-2">
-          {sidebarMenu.map(({ name, icon, action }) => (
-            <div key={name} className="w-full">
-              {name === 'Search' ? (
-                <SearchComponent />
-              ) : (
-                <button
-                  className="p-1 px-4 hover:bg-accent ease-in-out duration-300 w-full text-start flex items-center justify-between rounded-md"
-                  key={name}
-                  onClick={(e) => action(e, router)}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="">{icon}</span>
-                    <span className="">{name}</span>
-                  </div>
-                  {loading && name === "New story" && <Spinner />}
-                </button>
-              )}
-            </div>
+          {sidebarMenu.map(({ name, controller }) => (
+            <React.Fragment key={name}>{controller}</React.Fragment>
           ))}
           <Separator className="my-2" />
           <div className="w-full">
@@ -108,7 +92,7 @@ function Sidebar({
               <span
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleCreate(e, router);
+                  handleCreate(router);
                 }}
                 className="h-6 w-6 rounded-md hover:bg-primary ease-in-out duration-300 flex items-center justify-center"
               >

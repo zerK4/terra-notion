@@ -6,6 +6,7 @@ import { getSession } from './actions/authActions';
 import { users } from '../db/schema';
 import { eq } from 'drizzle-orm';
 import { db } from '../db';
+import { redirect } from 'next/navigation';
 
 const DocumentsPage = async () => {
   const { user } = await getSession();
@@ -20,6 +21,10 @@ const DocumentsPage = async () => {
     .where(eq(users.id, user.id));
 
   const { stories } = await getNavStories();
+
+  if (stories.length > 0) {
+    redirect(`/${stories[0].id}`);
+  }
 
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4 min-h-screen">

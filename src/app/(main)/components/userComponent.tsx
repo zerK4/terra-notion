@@ -18,10 +18,6 @@ export function UserComponent({ isMobile }: { isMobile: boolean }) {
   const { isClosed } = sidebarStore();
   const { logout, user } = useAuthStore();
 
-  useEffect(() => {
-    console.log(user, 'the user');
-  }, [user]);
-
   const router = useRouter();
   return (
     <DropdownMenu>
@@ -55,7 +51,6 @@ export function UserComponent({ isMobile }: { isMobile: boolean }) {
           className="cursor-pointer"
         >
           Log out
-          <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
