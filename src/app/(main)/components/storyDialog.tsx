@@ -8,6 +8,7 @@ import React, { MouseEvent } from 'react';
 import TextEditor from '@/src/components/editor';
 import { ArchiveRestore, Trash } from 'lucide-react';
 import { removeArchived, unarchiveStory } from '../../actions/storyActions';
+import { toast } from 'sonner';
 
 function StoryDialog({
   story,
@@ -23,8 +24,16 @@ function StoryDialog({
 
   const handleRemove = async (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    await removeArchived(story.id);
+    const promise = removeArchived(story.id);
     setFilter(story.id);
+
+    toast.promise(promise, {
+      loading: 'Removing...',
+      success: (data) => {
+        return `Removed.`;
+      },
+      error: 'An error occurred!',
+    });
   };
 
   return (

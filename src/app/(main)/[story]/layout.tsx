@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import Sidebar from '../components/sidebar';
 import TopBanner from '../components/topBanner';
 import { getNavStories } from '../../actions/storyActions';

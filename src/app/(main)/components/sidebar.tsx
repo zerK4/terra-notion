@@ -11,8 +11,6 @@ import { useRouter } from 'next/navigation';
 import { NavStories } from '@/src/interfaces/story';
 import { handleCreate, sidebarMenu } from '@/src/menus/sidebar';
 import ArchivedStories from './archivedStories';
-import SearchComponent from './searchComponent';
-import { Spinner } from '@/src/components/Spinner';
 import { generalStore } from '@/src/store/general';
 
 function Sidebar({
@@ -27,7 +25,6 @@ function Sidebar({
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [myStories, setMyStories] = useState<NavStories[]>();
   const router = useRouter();
-  const { loading } = generalStore();
 
   useEffect(() => {
     if (stories !== undefined) {

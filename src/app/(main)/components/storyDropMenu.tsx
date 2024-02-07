@@ -8,15 +8,22 @@ import { MoreHorizontal, PlusCircle, Trash } from 'lucide-react';
 import React from 'react';
 import { removePage } from '../../actions/storyActions';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 function StoryDropMenu({ id }: { id: string }) {
   const router = useRouter();
   const handleDelete = async () => {
-    const data = await removePage(id);
+    const promise = removePage(id);
 
-    router.push(data.redirect);
-
-    console.log(data, 'tjis is data');
+    toast.promise(promise, {
+      loading: 'Removing...',
+      success: (data) => {
+        console.log(data);
+        router.push(data.redirect);
+        return `${data.data[0].name} has been removed.`;
+      },
+      error: 'Error',
+    });
   };
   return (
     <DropdownMenu>
